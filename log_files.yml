@@ -1,0 +1,17 @@
+---
+- name: Collect log files from server1
+  hosts: server1
+  tasks:
+    - name: Collect log files
+      find:
+        paths: /var/log
+        patterns: "*.log"
+      register: log_files
+
+    - name: Save log files in file
+      lineinfile:
+        line: "{{ log_files | to_nice_json }}"
+        path: /home/angela/CPE243_HOA7/log_files.json
+        insertafter: LOG
+      delegate_to: workstation
+
